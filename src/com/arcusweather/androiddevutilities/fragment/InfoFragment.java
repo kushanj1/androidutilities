@@ -62,13 +62,14 @@ public class InfoFragment extends Fragment {
 			geocoderText += "geocoder present: " + Geocoder.isPresent() + "\n";
 			if(!lat.equals(new String("")) && !lon.equals(new String("")))
 			{
+				geocoderText += "geocoder usage: ";
 				try {
 					@SuppressWarnings("unused")
 					List<Address> addresses = null;
 					addresses = gcd.getFromLocation(Double.parseDouble(lat), Double.parseDouble(lon), 1);
-					geocoderText += "using geocoder\n";
+					geocoderText += "Yes\n";
 				} catch (IOException e1) {
-					geocoderText += "Not using geocoder\n";
+					geocoderText += "No - " + e1.getMessage() + "\n";
 				}
 			}
         }
