@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import org.json.JSONException;
+
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 
 import com.arcusweather.androiddevutilities.R;
 import com.arcusweather.androiddevutilities.activity.MainActivity;
+import com.arcusweather.androiddevutilities.helper.MapsGeocodeHelper;
 
 public class InfoFragment extends Fragment {
 	public int widgetId;
@@ -60,6 +63,8 @@ public class InfoFragment extends Fragment {
 
 			Geocoder gcd = new Geocoder(this.getActivity(), Locale.getDefault());
 			geocoderText += "geocoder present: " + Geocoder.isPresent() + "\n";
+			
+			Address address = null;
 			if(!lat.equals(new String("")) && !lon.equals(new String("")))
 			{
 				geocoderText += "geocoder usage: ";
@@ -67,8 +72,14 @@ public class InfoFragment extends Fragment {
 					@SuppressWarnings("unused")
 					List<Address> addresses = null;
 					addresses = gcd.getFromLocation(Double.parseDouble(lat), Double.parseDouble(lon), 1);
+					address = addresses.get(0);
 					geocoderText += "Yes\n";
 				} catch (IOException e1) {
+					MapsGeocodeHelper mgh = new MapsGeocodeHelper();
+					try {
+						address = mgh.getAltLocation(lat + "," + lon);
+					} catch (JSONException e) {
+					}
 					geocoderText += "No - " + e1.getMessage() + "\n";
 				}
 			}
